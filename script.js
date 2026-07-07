@@ -216,10 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
             displayReviews.forEach(rev => {
                 const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
                 const reviewHTML = `
-                    <div style="background: var(--bg-color); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.05);">
-                        <div style="color: var(--accent); font-size: 1.2rem; margin-bottom: 5px;">${stars}</div>
-                        <h4 style="margin-bottom: 5px; color: var(--primary-dark); font-family: 'Poppins', sans-serif;">${rev.name}</h4>
-                        ${rev.review ? `<p style="color: var(--text-light); margin: 0; font-style: italic;">"${rev.review}"</p>` : ''}
+                    <div style="background: var(--bg-color); padding: 12px 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.05);">
+                        <div style="color: var(--accent); font-size: 1.1rem; margin-bottom: 2px;">${stars}</div>
+                        <h4 style="margin-bottom: 2px; font-size: 1rem; color: var(--primary-dark); font-family: 'Poppins', sans-serif;">${rev.name}</h4>
+                        ${rev.review ? `<p style="color: var(--text-light); margin: 0; font-style: italic; font-size: 0.95rem;">"${rev.review}"</p>` : ''}
                     </div>
                 `;
                 reviewsList.innerHTML += reviewHTML;
