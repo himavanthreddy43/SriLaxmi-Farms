@@ -1111,21 +1111,28 @@ footer {
 
 @media (max-width: 768px) {
     .nav-links {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 250px;
-        height: 100vh;
+        position: absolute;
+        top: 100%;
+        right: 20px;
+        width: 200px;
         background: var(--white);
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        transition: 0.4s;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        padding: 20px 0;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: var(--transition);
+        gap: 20px;
     }
     
     .nav-links.active {
-        right: 0;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
     
     .nav-links a {
