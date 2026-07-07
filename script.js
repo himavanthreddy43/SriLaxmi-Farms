@@ -174,16 +174,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Reviews Display Logic
+    const recentReviewsContainer = document.getElementById('recentReviewsContainer');
+    const reviewsList = document.getElementById('reviewsList');
+    const reviewCountDisplay = document.getElementById('reviewCount');
+
+    function renderReviews() {
+        if (!recentReviewsContainer || !reviewsList) return;
+        
+        let reviews = JSON.parse(localStorage.getItem('farm_reviews') || '[]');
+        if (reviews.length > 0) {
+            recentReviewsContainer.style.display = 'block';
+            reviewCountDisplay.textContent = reviews.length;
+            
+            reviewsList.innerHTML = '';
+            // Show newest first
+            reviews.slice().reverse().forEach(rev => {
+                const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+                const reviewHTML = `
+                    <div style="background: var(--bg-color); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.05);">
+                        <div style="color: var(--accent); font-size: 1.2rem; margin-bottom: 5px;">${stars}</div>
+                        <h4 style="margin-bottom: 5px; color: var(--primary-dark); font-family: 'Poppins', sans-serif;">${rev.name}</h4>
+                        ${rev.review ? `<p style="color: var(--text-light); margin: 0; font-style: italic;">"${rev.review}"</p>` : ''}
+                    </div>
+                `;
+                reviewsList.innerHTML += reviewHTML;
+            });
+        }
+    }
+
+    renderReviews();
+
     // Rating Form Submission
     const ratingForm = document.getElementById('ratingForm');
     if (ratingForm) {
         ratingForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const ratingInput = document.querySelector('input[name="rating"]:checked');
+            if (!ratingInput) {
+                alert("Please select a star rating");
+                return;
+            }
+            
+            const rating = parseInt(ratingInput.value);
             const name = document.getElementById('reviewerName').value;
             const phone = document.getElementById('reviewerPhone').value;
             const review = document.getElementById('reviewText').value;
+            
+            // Save to localStorage
+            const newReview = { rating, name, review, date: new Date().toISOString() };
+            let reviews = JSON.parse(localStorage.getItem('farm_reviews') || '[]');
+            reviews.push(newReview);
+            localStorage.setItem('farm_reviews', JSON.stringify(reviews));
+            
+            // Re-render UI
+            renderReviews();
+            
+            // Clear form and show modal
+            ratingForm.reset();
             
             const text = `Hello Sri Laxmi Farms,\n\nI have submitted a new review:\n*Rating:* ${rating} Stars\n*Name:* ${name}\n*Phone:* ${phone}\n*Review:* ${review}`;
             
