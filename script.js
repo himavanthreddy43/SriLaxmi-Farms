@@ -178,6 +178,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const recentReviewsContainer = document.getElementById('recentReviewsContainer');
     const reviewsList = document.getElementById('reviewsList');
     const reviewCountDisplay = document.getElementById('reviewCount');
+    const reviewToggleContainer = document.getElementById('reviewToggleContainer');
+    const toggleReviewsBtn = document.getElementById('toggleReviewsBtn');
+    let showAllReviews = false;
+
+    if (toggleReviewsBtn) {
+        toggleReviewsBtn.addEventListener('click', () => {
+            showAllReviews = !showAllReviews;
+            renderReviews();
+        });
+    }
 
     function renderReviews() {
         if (!recentReviewsContainer || !reviewsList) return;
@@ -188,8 +198,22 @@ document.addEventListener('DOMContentLoaded', () => {
             reviewCountDisplay.textContent = reviews.length;
             
             reviewsList.innerHTML = '';
-            // Show newest first
-            reviews.slice().reverse().forEach(rev => {
+            
+            let displayReviews = reviews.slice().reverse();
+            
+            if (displayReviews.length > 3) {
+                if (reviewToggleContainer) reviewToggleContainer.style.display = 'block';
+                if (!showAllReviews) {
+                    displayReviews = displayReviews.slice(0, 3);
+                    if (toggleReviewsBtn) toggleReviewsBtn.textContent = 'See More';
+                } else {
+                    if (toggleReviewsBtn) toggleReviewsBtn.textContent = 'See Less';
+                }
+            } else {
+                if (reviewToggleContainer) reviewToggleContainer.style.display = 'none';
+            }
+            
+            displayReviews.forEach(rev => {
                 const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
                 const reviewHTML = `
                     <div style="background: var(--bg-color); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.05);">
